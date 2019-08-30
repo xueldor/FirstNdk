@@ -1,0 +1,1 @@
+javah -encoding UTF-8 -jni com.xue.firstndk.Jni2Test

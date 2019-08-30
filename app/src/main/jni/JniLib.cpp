@@ -20,61 +20,70 @@ const char* long_to_string(long i) {
 }
 
 
-JNIEXPORT jstring JNICALL Java_com_xue_firstndk_JniTest_getString
-        (JNIEnv *env, jclass jclz){
+/**
+ * 从native返回一个String给Java
+ * @param env
+ * @param jclz
+ * @return
+ */
+JNIEXPORT jstring JNICALL Java_com_xue_firstndk_JniTest_getString(JNIEnv *env, jclass jclz){
   return env->NewStringUTF("Hello 1");
 
 }
 
 
-/*
+/**
  * Class:     com_xueldor_testndk_Printf_Jni
  * Method:    printHello
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_xue_firstndk_JniTest_printHello
-        (JNIEnv *, jobject){
+JNIEXPORT void JNICALL Java_com_xue_firstndk_JniTest_printHello(JNIEnv *, jobject){
   __android_log_print(ANDROID_LOG_INFO, "TestNdk","Hello world");
   printf("Hello world!");
 }
 
-/*
+/**
+ * 传入String转换为C类型的字符串
  * Class:     com_xue_firstndk_JniTest
  * Method:    printStr
  * Signature: (Ljava/lang/String;)V
  */
+ extern "C"
 JNIEXPORT void JNICALL Java_com_xue_firstndk_JniTest_printStr(JNIEnv *env, jobject, jstring jstr){
   const char* cstr = env->GetStringUTFChars(jstr,JNI_FALSE);
   if(cstr == NULL){
     std::cout<<"Param is NULL"<<std::endl;
     return ;
   }
+  //cout看不到输出，可能是Android系统将stdout和stderr重定向到/dev/null
   std::cout<<cstr<<std::endl;
+  __android_log_print(ANDROID_LOG_INFO,"TestNdk","%s",cstr);
   env->ReleaseStringUTFChars(jstr,cstr);
 
 
 
 }
-/*
+/**
+ * 1、传入boolean转成C的bool类型
+ * 2、C的bool转成jboolean返回给java
  * Class:     com_xueldor_testndk_Printf_Jni
  * Method:    incBoolean
  * Signature: (Z)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_xue_firstndk_JniTest_reverseBoolean
-        (JNIEnv * env, jobject thiz, jboolean val){
+JNIEXPORT jboolean JNICALL Java_com_xue_firstndk_JniTest_reverseBoolean(JNIEnv * env, jobject thiz, jboolean val){
   //jboolean转bool
   bool b = val==JNI_FALSE;
   //bool转jboolean
   return b ? JNI_TRUE:JNI_FALSE;
 }
 
-/*
+/**
+ *
  * Class:     com_xueldor_testndk_Printf_Jni
  * Method:    toUpperChar
  * Signature: (C)C
  */
-JNIEXPORT jchar JNICALL Java_com_xue_firstndk_JniTest_toUpperChar
-        (JNIEnv* env, jobject thiz, jchar val){
+JNIEXPORT jchar JNICALL Java_com_xue_firstndk_JniTest_toUpperChar(JNIEnv* env, jobject thiz, jchar val){
   if(val >= 'a' && val <= 'z'){
     val -= ('a' - 'A');
   }
@@ -86,8 +95,7 @@ JNIEXPORT jchar JNICALL Java_com_xue_firstndk_JniTest_toUpperChar
  * Method:    incShort
  * Signature: (S)S
  */
-JNIEXPORT jshort JNICALL Java_com_xue_firstndk_JniTest_incShort
-        (JNIEnv * env, jclass clazz, jshort val){
+JNIEXPORT jshort JNICALL Java_com_xue_firstndk_JniTest_incShort(JNIEnv * env, jclass clazz, jshort val){
   return ++val;
 }
 
@@ -96,8 +104,7 @@ JNIEXPORT jshort JNICALL Java_com_xue_firstndk_JniTest_incShort
  * Method:    incInt
  * Signature: (I)[I
  */
-JNIEXPORT jintArray JNICALL Java_com_xue_firstndk_JniTest_createIntArr
-        (JNIEnv* env, jobject thiz, jint len){
+JNIEXPORT jintArray JNICALL Java_com_xue_firstndk_JniTest_createIntArr(JNIEnv* env, jobject thiz, jint len){
   jintArray intArr = env->NewIntArray(len);
   if(intArr == NULL){
     return NULL;
@@ -116,8 +123,7 @@ JNIEXPORT jintArray JNICALL Java_com_xue_firstndk_JniTest_createIntArr
  * Method:    incLong
  * Signature: (J)J
  */
-JNIEXPORT jlong JNICALL Java_com_xue_firstndk_JniTest_incLong
-        (JNIEnv* env, jobject thiz, jlong val){
+JNIEXPORT jlong JNICALL Java_com_xue_firstndk_JniTest_incLong(JNIEnv* env, jobject thiz, jlong val){
   return ++val;
 }
 
@@ -126,8 +132,7 @@ JNIEXPORT jlong JNICALL Java_com_xue_firstndk_JniTest_incLong
  * Method:    getFloat
  * Signature: (F)F
  */
-JNIEXPORT jfloat JNICALL Java_com_xue_firstndk_JniTest_getFloat
-        (JNIEnv* env, jobject thiz, jfloat f){
+JNIEXPORT jfloat JNICALL Java_com_xue_firstndk_JniTest_getFloat(JNIEnv* env, jobject thiz, jfloat f){
   return f;
 }
 
@@ -136,8 +141,7 @@ JNIEXPORT jfloat JNICALL Java_com_xue_firstndk_JniTest_getFloat
  * Method:    getDouble
  * Signature: (D)D
  */
-JNIEXPORT jdouble JNICALL Java_com_xue_firstndk_JniTest_getDouble
-        (JNIEnv* env, jobject thiz, jdouble d){
+JNIEXPORT jdouble JNICALL Java_com_xue_firstndk_JniTest_getDouble(JNIEnv* env, jobject thiz, jdouble d){
   return d;
 }
 
@@ -146,12 +150,10 @@ JNIEXPORT jdouble JNICALL Java_com_xue_firstndk_JniTest_getDouble
  * Method:    getClassName
  * Signature: (Ljava/lang/Class;)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_xue_firstndk_JniTest_charsToString
-        (JNIEnv * env, jobject thiz, jcharArray chars){
+JNIEXPORT jstring JNICALL Java_com_xue_firstndk_JniTest_charsToString(JNIEnv * env, jobject thiz, jcharArray chars){
   const jchar* jb = env->GetCharArrayElements(chars,JNI_FALSE);
   jsize len = env->GetArrayLength(chars);
   const char* log = long_to_string(len);
-
 
   __android_log_print(ANDROID_LOG_INFO, "EEEEEE","%s", log);
   jstring str = env->NewString(jb,len);
