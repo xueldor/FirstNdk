@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
+import java.io.EOFException;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -38,12 +40,45 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("test callback");
         jni2Test.doTask();
         System.out.println("new Jni2 Obj " + Jni2Test.createInstance());
+
+        System.out.println("-------test jni3test");
+        Jni3Test jni3Test = new Jni3Test();
+        try {
+            jni3Test.throwEOFExpt();
+        } catch (EOFException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        try {
+            jni3Test.throwEOFExpt2();
+        } catch (EOFException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_UP){
             new Jni2Test().doTask();
+
+            Jni3Test jni3Test = new Jni3Test();
+            try {
+                jni3Test.throwEOFExpt();
+            } catch (EOFException e) {
+                System.out.println(e);
+            }
+            try {
+
+                jni3Test.throwEOFExpt2();
+            } catch (EOFException e) {
+                System.out.println(e.getMessage());
+            }
+
+            try {
+                jni3Test.checkJavaExpt();
+            }catch (Exception e){
+                System.out.println("捕获异常" + e.getMessage());
+            }
         }
         return true;
     }
