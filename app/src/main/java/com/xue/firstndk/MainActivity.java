@@ -52,18 +52,18 @@ public class MainActivity extends AppCompatActivity {
         try {
             jni3Test.throwEOFExpt();
         } catch (EOFException e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage()==null?"null" : e.getMessage());
             e.printStackTrace();
         }
         try {
             jni3Test.throwEOFExpt2();
         } catch (EOFException e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage()==null?"null" : e.getMessage());
         }
         try {
             jni3Test.checkJavaExpt();
         }catch (Exception e){
-            System.out.println("捕获异常" + e.getMessage());
+            System.out.println("捕获异常" + e.getMessage()==null?"null" : e.getMessage());
         }
 
         System.out.println("-------test jni4Test");
