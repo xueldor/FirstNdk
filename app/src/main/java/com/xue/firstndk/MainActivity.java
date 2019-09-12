@@ -16,6 +16,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         System.out.println(JniTest.getString());
 
+        do_test();
+    }
+
+    private void do_test(){
+        System.out.println("-------------run do_test--------");
+
         JniTest test = new JniTest();
         test.printHello();
         test.printStr("test print in cpp");
@@ -54,31 +60,22 @@ public class MainActivity extends AppCompatActivity {
         } catch (EOFException e) {
             System.out.println(e.getMessage());
         }
+        try {
+            jni3Test.checkJavaExpt();
+        }catch (Exception e){
+            System.out.println("捕获异常" + e.getMessage());
+        }
+
+        System.out.println("-------test jni4Test");
+        Jni4Test.printHello();
+        Jni4Test.printWorld();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_UP){
-            new Jni2Test().doTask();
+            do_test();
 
-            Jni3Test jni3Test = new Jni3Test();
-            try {
-                jni3Test.throwEOFExpt();
-            } catch (EOFException e) {
-                System.out.println(e);
-            }
-            try {
-
-                jni3Test.throwEOFExpt2();
-            } catch (EOFException e) {
-                System.out.println(e.getMessage());
-            }
-
-            try {
-                jni3Test.checkJavaExpt();
-            }catch (Exception e){
-                System.out.println("捕获异常" + e.getMessage());
-            }
         }
         return true;
     }
