@@ -3,6 +3,7 @@ package com.xue.firstndk;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.MotionEvent;
 
 import java.io.EOFException;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(test.reverseBoolean(true));
         System.out.println(test.toUpperChar('a'));
         System.out.println(test.incShort((short)3));
-        System.out.println(test.createIntArr(5));
+        printIntArray(test.createIntArr(5));
         System.out.println(test.incLong(45));
         System.out.println(test.getFloat(3.2F));
         System.out.println(test.getDouble(5.54));
@@ -69,14 +70,35 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("-------test jni4Test");
         Jni4Test.printHello();
         Jni4Test.printWorld();
+
+
+        System.out.println("-------test jni5Test");
+        Jni5Test jni5Test = new Jni5Test();
+        jni5Test.createLOCKObject();
+        jni5Test.startWatcher0();
+        int repeat = 3000;
+        while(--repeat > 0){
+            System.out.println("--------当前stored值为 " + jni5Test.getInteger0());
+            SystemClock.sleep(1);
+        }
+        jni5Test.setInteger0(100);
+        System.out.println("--------当前stored值为 " + jni5Test.getInteger0());
+        jni5Test.stopWatcher0();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_UP){
             do_test();
-
         }
         return true;
+    }
+
+    void printIntArray(int []a){
+        System.out.print("[");
+        for (int i :a) {
+            System.out.print(i + "\t");
+        }
+        System.out.println("]");
     }
 }

@@ -109,12 +109,26 @@ JNIEXPORT jintArray JNICALL Java_com_xue_firstndk_JniTest_createIntArr(JNIEnv* e
   if(intArr == NULL){
     return NULL;
   }
-  jboolean b=JNI_TRUE;
+  __android_log_print(ANDROID_LOG_INFO, "EEEEEEintarr","%p", &intArr);//%p 将&intArr当做地址打印
+  jboolean b=JNI_FALSE;
   jint* iRR = env->GetIntArrayElements(intArr, &b);
+  //方法一，通过遍历赋值
   for (int i = 0; i < len; ++i) {
     iRR[i] = i;
   }
-  env->ReleaseIntArrayElements(intArr, iRR, 0);
+  __android_log_print(ANDROID_LOG_INFO, "EEEEEEintarr2","%p", iRR);
+
+  //方法二，通过SetIntArrayRegion赋值
+//  jint* iRRNew = new jint[len];
+//  iRRNew[len-1] = 5;
+//  env->SetIntArrayRegion(intArr,0,len,iRRNew);
+
+//  jintArray intArr2 = env->NewIntArray(len);
+//  env->ReleaseIntArrayElements(intArr2, iRR, 0);//这两行测试表明，ReleaseIntArrayElements会将iRR的值赋给第一个参数
+
+  env->ReleaseIntArrayElements(intArr, iRR, 0);//与GetIntArrayElements成对
+
+  //将上一行(ReleaseIntArrayElements)注释掉，将方法二注释放开。观察java中打印结果，会发现iRRNew[len-1] = 5赋值有效
   return intArr;
 }
 
