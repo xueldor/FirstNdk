@@ -1,2 +1,2 @@
-include ':app', ':livecamera'
+include ':app',':testalooper', ':livecamera', ':simplenativeactivity'
 rootProject.name='FirstNdk'

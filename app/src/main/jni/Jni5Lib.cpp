@@ -59,6 +59,7 @@ JNIEnv* getJNIEnv(JavaVM* pJavaVM) {
     lJavaVMAttachArgs.name = "NativeThread";
     lJavaVMAttachArgs.group = NULL;
     JNIEnv* lEnv;
+    //POSIX线程不是Java平台的一部分，虚拟机不能识别，为了和Java空间交互，必须先附着到虚拟机上
     if (pJavaVM->AttachCurrentThread(&lEnv,&lJavaVMAttachArgs) != JNI_OK) {
         lEnv = NULL;
     }

@@ -1,0 +1,4 @@
+1、执行pthread_create后应用崩溃
+--》经分析，应该是pthread_create创建的子线程执行过程中发生异常
+一开始以为是ALooper_prepare报错，后来发现ALooper_prepare后面的log打印出来了
+解决：需要用pthread_exit(NULL)正常退出线程

@@ -1,0 +1,1 @@
+javah -encoding UTF-8 -d ../jni -jni com.xue.testalooper.MainActivity
