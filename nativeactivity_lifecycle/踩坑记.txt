@@ -1,0 +1,30 @@
+1、build时提示undefined reference to 'AInputQueue_hasEvents
+-> AInputQueue_hasEvents定义在input.h里。cpp文件已经包含了此头文件，但是构建时没有找到对应的实现
+-> CMakeLists.txt中，加载libandroid.so
+target_link_libraries( # Specifies the target library.
+        native-main
+                       # Links the target library to the log library
+                       # included in the NDK.
+                       ${log-lib} )
+添加一个android:
+target_link_libraries( # Specifies the target library.
+       native-main
+                      # Links the target library to the log library
+                      # included in the NDK.
+                      android
+                      ${log-lib} )
+
+CMake语法：
+1、add_library
+add_library(<name> [STATIC | SHARED | MODULE]
+            [EXCLUDE_FROM_ALL]
+            [source1] [source2] [...])
+
+2、link_directories
+link_directories(
+    lib
+)
+
+3、target_link_libraries
+target_link_libraries(<target> [item1] [item2] [...]
+                      [[debug|optimized|general] <item>] ...)
