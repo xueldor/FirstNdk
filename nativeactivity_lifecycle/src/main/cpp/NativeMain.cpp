@@ -99,7 +99,7 @@ void *looper(void *args) {
     ANativeActivity *activity = (ANativeActivity *) args;
     AInputQueue *queue = (AInputQueue *) activity->instance;
     AInputEvent *event = NULL;
-    while (isLoop) {//这里会出现死循环，而且没有暂停和阻塞，会占用很高CPU(单核100%)，是否可优化？
+    while (isLoop) {//这里的循环，会占用很高CPU(单核100%)。我们只演示InputQueue的用法，不考虑合理性
         if (!AInputQueue_hasEvents(queue)) {
             continue;
         }

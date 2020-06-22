@@ -1,0 +1,36 @@
+Log信息：
+06-16 18:22:11.314 27793 27808 F libc    : Fatal signal 4 (SIGILL), code 1, fault addr 0xb40fd3f4 in tid 27808 (nativeeventtest)
+06-16 18:22:11.416   230   230 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+06-16 18:22:11.416   230   230 F DEBUG   : CM Version: 'unknown'
+06-16 18:22:11.416   230   230 F DEBUG   : Build fingerprint: 'Huawei/sm_H30-T10/H30-T10:6.0.1/MOB30Z/dbcfe8794e:userdebug/test-keys'
+06-16 18:22:11.416   230   230 F DEBUG   : Revision: '0'
+06-16 18:22:11.416   230   230 F DEBUG   : ABI: 'arm'
+06-16 18:22:11.417   230   230 F DEBUG   : pid: 27793, tid: 27808, name: nativeeventtest  >>> com.xue.nativeeventtest <<<
+06-16 18:22:11.417   230   230 F DEBUG   : signal 4 (SIGILL), code 1 (ILL_ILLOPC), fault addr 0xb40fd3f4
+06-16 18:22:11.441   230   230 F DEBUG   :     r0 00000022  r1 a3367400  r2 f540f300  r3 f540f300
+06-16 18:22:11.441   230   230 F DEBUG   :     r4 a3367930  r5 a3367970  r6 a3367930  r7 a3367910
+06-16 18:22:11.441   230   230 F DEBUG   :     r8 b6fc3b94  r9 b4101018  sl a3269000  fp b40fd3cd
+06-16 18:22:11.441   230   230 F DEBUG   :     ip a3367428  sp a3367900  lr b40fd3f3  pc b40fd3f4  cpsr 600f0030
+06-16 18:22:11.450   230   230 F DEBUG   :
+06-16 18:22:11.450   230   230 F DEBUG   : backtrace:
+06-16 18:22:11.450   230   230 F DEBUG   :     #00 pc 000013f4  /data/app/com.xue.nativeeventtest-2/lib/arm/libnative-main.so
+06-16 18:22:11.450   230   230 F DEBUG   :     #01 pc 0004023b  /system/lib/libc.so (_ZL15__pthread_startPv+30)
+06-16 18:22:11.450   230   230 F DEBUG   :     #02 pc 0001a075  /system/lib/libc.so (__start_thread+6)
+
+addr2line定位:arm-linux-androideabi-addr2line -f -e xxx.so addr
+要求:1)不同架构用不同的addr2line.exe工具，与so匹配，这里用的是arm-linux-androideabi-addr2line.exe
+2)so文件必须带debug信息，用debug目录下的。Android源码环境编译的话，使用symbol目录下的
+因为跑这个程序用的手机是armeabi-v7a架构，所以libnative-main.so选armeabi-v7a目录下的
+执行
+$ xxx/arm-linux-androideabi-addr2line.exe -f -e libnative-main.so 0xb40fd3f4
+输出:
+??
+??:0
+原因:0xb40fd3f4是内存运行地址（fault addr 0xb40fd3f4 in tid 27808）,我们的目的是想找到报错代码行的位置，
+所以应该用代码地址 #00 pc 000013f4  /data/app/com.xue.nativeeventtest-2/lib/arm/libnative-main.so
+执行：
+$ xxx/arm-linux-androideabi-addr2line.exe -f -e xxxx/debug/obj/armeabi-v7a/libnative-main.so 000013f4
+输出
+_ZL9threadRunPv
+D:/androidworkspace/NativeEventTest/inputeventtest/src/main/cpp/NativeMain.cpp:111
+定位成功!

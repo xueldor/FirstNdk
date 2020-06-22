@@ -1,0 +1,7 @@
+在nativeactivity_lifecycle中，已经演示了NativeActivity的创建、生命周期。但是其中处理点击事件和按键事件是通过一个轮询主动从inputqueue中查询得到的。
+我们改为用looper通知事件，更加合理。
+
+1、在ANativeActivity_onCreate中用ALooper_prepare(0)得到指向主线程上的looper的指针
+2、在onInputQueueCreated函数中，用AInputQueue_attachLooper将事件队列与looper绑定起来，指定事件回调函数。
+3、在回调函数中用AInputQueue_getEvent得到事件对象。
+4、事件处理完成后调用AInputQueue_finishEvent告诉系统，事件已经消费。
