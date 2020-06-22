@@ -49,7 +49,8 @@ static void *threadRun(void *param) {
     ALooper_pollAll(-1, NULL, NULL, NULL);//-1:阻塞
     __android_log_write(ANDROID_LOG_INFO, "TestNativeLooper", "After ALooper_polled");
     ALooper_removeFd(thelooper, readpipe);
-    pthread_exit(NULL);//必须调用pthread_exit退出线程,否则应用崩溃
+//    pthread_exit(NULL);//调用pthread_exit退出线程
+/* or */    return (void*)0;
 }
 
 JNIEXPORT void JNICALL
@@ -75,10 +76,12 @@ JNIEXPORT void JNICALL Java_com_xue_testalooper_MainActivity_createLooper2(JNIEn
 
         sleep(1);
     }
-    write(writepipe, "close", 5);//单个线程写，则无需加锁
-    ALooper_wake(thelooper);//ALooper_pollAll从阻塞中唤醒
+    write(writepipe, "close", 5);//假设单个线程写，则无需加锁
 
+    sleep(1);//等looper线程处理完回到阻塞状态，然后wake才有用
+    ALooper_wake(thelooper);//ALooper_pollAll从阻塞中唤醒
     sleep(1);//等ALooper_removeFd执行再关闭管道
+
     if (readpipe != -1) {//关闭管道
         close(readpipe);
     }
