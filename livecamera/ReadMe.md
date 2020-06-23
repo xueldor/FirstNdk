@@ -16,6 +16,7 @@ AndroidBitmap_lockPixels  操作bitmap时必须独占此对象，读写排他性
 
 AndroidBitmap_unlockPixels()  释放锁
 
+Android.mk中，添加LOCAL_LDLIBS+=-ljnigraphics。这是从android2.2开始提供的JNI Graphics API.
 
 
 运行代码，移动摄像头，有明显延迟，表明这个代码远没有达到最优

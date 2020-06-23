@@ -5,3 +5,13 @@
 2、在onInputQueueCreated函数中，用AInputQueue_attachLooper将事件队列与looper绑定起来，指定事件回调函数。
 3、在回调函数中用AInputQueue_getEvent得到事件对象。
 4、事件处理完成后调用AInputQueue_finishEvent告诉系统，事件已经消费。
+
+事件回调函数的片段：
+while (AInputQueue_getEvent(inputQueue, &event) >= 0) {
+        if (AInputQueue_preDispatchEvent(inputQueue, event)) {
+            continue;
+        }
+        AInputQueue_finishEvent(inputQueue, event, OnInputEvent(event));
+    }
+官方提供的android_native_app_glue.c封装了一些细节，可以找到process_input函数，函数实现与上面的片段相类似。
+后面的例子用glue实现，无需再写这种代码。
