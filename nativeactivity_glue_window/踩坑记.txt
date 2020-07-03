@@ -1,0 +1,6 @@
+1、加断点，debug没有停在断点处
+--》这是一起乌龙。代码是从 nativeactivity_glue 拷贝过来的。不小心断点加在nativeactivity_glue里，调试的是nativeactivity_glue_window
+
+2、leftY -= repeat * element->height - 200;
+本意是希望执行leftY = leftY - repeat * element->height - 200;
+实际-=后面的表达式是一个整体，执行的是leftY = leftY - (repeat * element->height - 200);

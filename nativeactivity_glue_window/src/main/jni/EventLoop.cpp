@@ -11,7 +11,6 @@ EventLoop::EventLoop(android_app *pApplication, ActivityHandler& pActivityHandle
 }
 
 void EventLoop::run() {
-    int32_t result;
     int32_t events;
     android_poll_source* source;
 
@@ -19,8 +18,7 @@ void EventLoop::run() {
     while (true){
         //当timeout==-1时， ALooper_pollAll()保持阻塞，直到有一个event。处理完event通过while继续阻塞
         //当timeout==0时， ALooper_pollAll()立即返回，如果没有可以poll的事件，返回值为负数，执行opStep
-        while((result = ALooper_pollAll(mEnabled ? 0:-1,NULL,&events,(void**)&source)) >= 0){
-            Log::info("result=%d",result);
+        while(ALooper_pollAll(mEnabled ? 0 : -1,NULL,&events,(void**)&source) >= 0){
             if(source != NULL){
                 if(source == &mApplication->inputPollSource){
                     Log::info("Processing an input event");
