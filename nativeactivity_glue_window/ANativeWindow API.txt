@@ -1,0 +1,27 @@
+AnativeWindow API
+Defined in android/native_window.h 以及 android/native_window_jni.h
+
+int32_t ANativeWindow_setBuffersGeometry(ANativeWindow* window, int32_t width, int32_t height, int32_t format)
+初始化 Pixel format，以及window buffer的大小.
+Pixel formats 的可能值有:
+WINDOW_FORMAT_RGBA_8888 for 32-bit colors per pixel, 8 bits for each of the Red, Green, Blue, and Alpha (for transparency) channels.
+WINDOW_FORMAT_RGBX_8888 is the same as the previous one, except that the Alpha channel is ignored.
+WINDOW_FORMAT_RGB_565 for 16-bit colors per pixel (5 bits for Red and Blue, and 6 for the Green channel).
+如果width和height传0，使用window size。如果非0，在屏幕显示时会放缩，以匹配window像素。
+
+int32_t ANativeWindow_lock(ANativeWindow* window, ANativeWindow_Buffer* outBuffer,ARect* inOutDirtyBounds)
+int32_t ANativeWindow_unlockAndPost(ANativeWindow* window)：这两个方法必须成对
+
+void ANativeWindow_acquire(ANativeWindow* window):
+在java端获得一个引用。防止window被java回收。当你没有好的方法控制surface的生命周期时，这样做是必要的。
+
+ANativeWindow* ANativeWindow_fromSurface(JNIEnv* env, jobject surface)：
+将一个java中的android.view.Surface对象与native window关联。并自动获取对surface的引用。结束后需要ANativeWindow_release来释放。
+
+void ANativeWindow_release(ANativeWindow* window)：移除引用。忘记调用这个方法，会导致内存泄漏。
+
+int32_t ANativeWindow_getWidth(ANativeWindow* window);
+int32_t ANativeWindow_getHeight(ANativeWindow* window);
+int32_t ANativeWindow_getFormat(ANativeWindow* window)
+这几个方法含义是不言而喻的。但是使用要当心，它们是非持久的、易变的、前后不一致的。可以先lock surface，这样得到的结果是可靠的。
+返回负值表示出错。

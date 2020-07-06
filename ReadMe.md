@@ -12,4 +12,6 @@ nativeactivity_glue:用android_native_app_glue.c实现前面两个例子的功�
 
 nativeactivity_glue_window:在nativeactivity_glue的基础上，增加获取window surface，并在上面绘制一个矩形(直接对像素赋值)
 
+nativeactivity_glue_window2:在nativeactivity_glue_window的基础上，增加动画效果。
+
 testexecutable: 生成可执行程序，push到手机执行。

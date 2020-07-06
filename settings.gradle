@@ -1,2 +1,2 @@
-include ':app',':testalooper', ':livecamera', ':nativeactivity_lifecycle', ':nativeactivity_events', ':nativeactivity_glue', ':testexecutable', ':nativeactivity_glue_window'
+include ':app',':testalooper', ':livecamera', ':nativeactivity_lifecycle', ':nativeactivity_events', ':nativeactivity_glue', ':testexecutable', ':nativeactivity_glue_window', ':nativeactivity_glue_window2'
 rootProject.name='FirstNdk'
