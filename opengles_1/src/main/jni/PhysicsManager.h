@@ -1,0 +1,35 @@
+#ifndef FIRSTNDK_PHYSICSMANAGER_H
+#define FIRSTNDK_PHYSICSMANAGER_H
+
+#include "GraphicsManager.h"
+#include "TimeManager.h"
+#include "Types.h"
+
+struct PhysicsBody{
+    PhysicsBody(Location* pLocation,int32_t pWidth,int32_t pHeight):location(pLocation),
+            width(pWidth), height(pHeight),velocityX(0.0f), velocityY(0.0f){
+    }
+
+    Location* location;
+    int32_t width; int32_t height;
+    float velocityX; float velocityY;
+};
+
+class PhysicsManager {
+public:
+    PhysicsManager(TimeManager& pTimeManager,GraphicsManager& pGraphicsManager);
+    ~PhysicsManager();
+
+    PhysicsBody* loadBody(Location& pLocation,int32_t pWidth,int32_t pHeight);
+    void update();
+
+private:
+    TimeManager& mTimeManager;
+    GraphicsManager& mGraphicsManager;
+    PhysicsBody* mPhysicsBodies[1024];
+    int32_t mPhysicsBodyCount;
+
+};
+
+
+#endif //FIRSTNDK_PHYSICSMANAGER_H
