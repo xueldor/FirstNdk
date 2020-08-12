@@ -1,0 +1,10 @@
+演示一下用java框架(不用NDK)调用OpenGL ES
+
+NDK才是最佳方案，故本示例仅仅简单介绍一下
+
+涉及的类：
+GLSurfaceView
+GLSurfaceView.Renderer
+
+
+GLSurfaceView是在一个单独的线程上面执行渲染的，所以需要注意线程的通信问题。用queueEvent发送到GLSurfaceView线程上面
